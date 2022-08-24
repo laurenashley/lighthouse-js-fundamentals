@@ -1,49 +1,36 @@
 const whereCanIPark = function (spots, vehicle) {
   let result;
   for (let row in spots) {
+    let thisRow = spots[row];
     let y = row;
     let x;
     let spot;
-    let type;
 
-    console.log(vehicle);
+    // Switch through vehicle types and .find() matching spot 
+    switch (vehicle) {
+      case 'regular':
+        spot = thisRow.find(spot => spot === 'R');
+        // console.log(vehicle, spot, spots[row].indexOf(spot));
+        break;
+      case 'small':
+        spot = thisRow.find(spot => spot === 'R' || spot === 'S');
+        // console.log(vehicle, spot, spots[row].indexOf(spot));
+        break;
+      case 'motorcycle':
+        spot = thisRow.find(spot => spot === spot.toUpperCase());
+        // console.log(vehicle, spot, spots[row].indexOf(spot));
+        break;
+    }
 
-
-    
-    // I might be doing this backwards, try doing vehicle type logic before finding the spot
-
-
-
-    spot = spots[row].find(col => col === col.toUpperCase()); 
-    x = spots[row].indexOf(spot);
+    // Set x to index of found spot, if no spot found set x to 0
+    x = thisRow.indexOf(spot) === -1 ? 0 : thisRow.indexOf(spot);
 
     // As long as both x and y are not 0 set result to xy pair, otherwise set to false
     result = (x !== 0 && y !== 0) ? [x,y] : false;
     
-    // Check if spot was found
+    // Stop looping if spot was found
     if (spot !== undefined) {
-      // Stop looping through spots if spot was found
-      if (spot === spot.toUpperCase()) {
-        switch (vehicle) {
-          case 'regular':
-            type = ['R'];
-            break;
-          case 'small':
-            type = ['S', 'R'];
-            break;
-          case 'motorcycle':
-            type = ['M', 'S', 'R'];
-            break;
-        }
-        // Find match in type array
-        console.log(spot, ' type ',type.find(i => i === spot));
-        if (spot === type.find(i => i === spot)) {
-          console.log('true');
-        } else if (type.find(i => i === spot) === undefined) {
-          console.log('false');
-        }
-        break;
-      }
+      break;
     }
   }
   
