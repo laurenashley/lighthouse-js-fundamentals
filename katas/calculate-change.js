@@ -36,12 +36,11 @@ const calculateChange = function(total, cash) {
     let denomination = x.amount;
     let divided = Math.trunc(remainder / denomination);
 
-    // is change divisible by x.amount?
     if (divided >= 1){
       // Push to result object
       result[x.name] = divided;
     }
-    
+
     // Store leftover amount
     remainder = remainder - (denomination * divided);
   }
