@@ -1,68 +1,76 @@
-const makeCase = function (input, c) {
-  let result = [];
+const makeCase = function (input, caseType) {
+  let result = '';
+  const caseIsArray = Array.isArray(caseType);
 
-  const makeCamelCase = function(input) {
+  const camelCase = function(input) {
     let noSpaces = input.replace(/[^A-Z0-9]/ig, ' ').split(' ');
+    let output = [];
+
     for (let i = 0; i < noSpaces.length; i++) {
-      result.push( i === 0 ?  noSpaces[i] : noSpaces[i].charAt(0).toUpperCase() + noSpaces[i].slice(1));
+      output.push( i === 0 ?  noSpaces[i] : noSpaces[i].charAt(0).toUpperCase() + noSpaces[i].slice(1));
     }
-    result = result.join('');
+    result = output.join('');
   };
 
-  const makeTitleCase = function(input) {
+  const titleCase = function(input) {
     input = input.split(' ');
+    let output = [];
     for (let i of input) {
-      result.push(i.charAt(0).toUpperCase() + i.slice(1));
+      // Question: I'm unclear why my first word isn't uppercase. 
+      output.push(i.charAt(0).toUpperCase() + i.slice(1));
     }
-    result = result.join(' ');
+    result = output.join(' ');
   };
 
-  const caseSwitch = function(c) {
-    switch (c) {
+  const caseSwitch = function(caseType) {
+    // First priority: Camel, Pascal, Snake, Kebab, Title
+    switch (caseType) {
       case 'camel':
-        makeCamelCase(input);
+        camelCase(input);
       break;
       case 'pascal':
-        makeCamelCase(input);
+        camelCase(input);
       break;
       case 'snake':
-        console.log(c, 'result is ', result);
-        result = result !== [] ? result[0].replace(/[^A-Z0-9]/ig, '_') : input.replace(/[^A-Z0-9]/ig, '_');
+        result = (result !== '') ? result.replace(/[^A-Z0-9]/ig, '_') : input.replace(/[^A-Z0-9]/ig, '_');
       break;
       case 'kebab':
         result = input.replace(/[^A-Z0-9]/gi, '-');
       break;
       case 'title':
-        makeTitleCase(input);
+        titleCase(input);
       break;
+    }
+
+    // Second priority: Vowel, Consonant
+    switch (caseType) {
       case 'vowel':
         result = input.replace(/[aeiou]/gi, (e) => { 
           return e.toUpperCase();
-      });
+        });
       break;
       case 'consonant':
         result = input.replace(/[bcdfghjklmnpqrstvwxys]/gi, (e) => { 
           return e.toUpperCase();
-      });
+        });
       break;
+    }
+
+    // Third priority: Upper, Lower
+    switch(caseType) {
       case 'upper':
-        console.log('result is ', result, input);
-        result = result === [] ? input.toUpperCase() : result[0].toUpperCase();
-        console.log(result);
+        result = (result !== '') ? result.toUpperCase() : input.toUpperCase();
+      break;
+      case 'lower':
+        result = (result !== '') ? result.toLowerCase() : input.toLowerCase();
       break;
     }
   }
 
-  const caseIsArray = Array.isArray(c);
-  const caseArray = caseIsArray ? c : [];
-
-  caseIsArray ? caseArray.forEach(e => caseSwitch(e)) : caseSwitch(c);
+  caseIsArray ? caseType.forEach(e => caseSwitch(e)) : caseSwitch(caseType);
 
   return result;
 }
-
-
-console.log(makeCase("this is a string", ["snake", "upper"]));
 
 console.log(makeCase("this is a string", "camel"));
 console.log(makeCase("this is a string", "pascal"));
@@ -72,3 +80,4 @@ console.log(makeCase("this is a string", "title"));
 console.log(makeCase("this is a string", "vowel"));
 console.log(makeCase("this is a string", "consonant"));
 console.log(makeCase("this is a string", ["upper", "snake"]));
+console.log(makeCase("this is a string", ["snake", "upper"]));
