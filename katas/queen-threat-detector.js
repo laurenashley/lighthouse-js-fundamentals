@@ -18,12 +18,36 @@ const generateBoard = function(white, black) {
 }
 
 const queenThreat = function(board) {
-  
+  let queens = [];
+
+  // Get queens' coordinates
+  for (let x = 0; x < board.length; x++) {
+    for (let y = 0; y < board[x].length; y++) {
+      if (board[x][y] === 1) {
+        queens.push(x, y);
+      }
+    }
+  }
+
+  // Extract each queen's coords
+  let firstQueen = [queens[0], queens[1]];
+  let secondQueen = [queens[2], queens[3]];
+
+  // Check vertical or horizontal threat: if queens share either axis
+  const isVerticalThreat = (firstQueen[0] === secondQueen[0]);
+  const isHorizontalThreat = (firstQueen[1] === secondQueen[1]);  
+  // Check diagonal threat: if sum of first coords equals sum of second coords
+  const isDiagonalThreat = (firstQueen[0] + firstQueen[1]) === (secondQueen[0] + secondQueen[1]);
+  let result;
+
+  isVerticalThreat || isHorizontalThreat || isDiagonalThreat ? result = true : result = false;
+
+  return result;
 }
 
-let whiteQueen = [0, 5];
-let blackQueen = [5, 0];
+let whiteQueen = [1, 5];
+let blackQueen = [5, 2];
 let generatedBoard = generateBoard(whiteQueen, blackQueen);
-// Table is required to see the board output without unexplained line breaks in the array rows
+// Table is required to see the chess board output without unexplained line breaks in the array rows
 console.table(generatedBoard);
 console.log(queenThreat(generatedBoard));
