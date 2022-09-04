@@ -30,8 +30,8 @@ const queenThreat = function(board) {
   }
 
   // Extract each queen's coords
-  let firstQueen = [queens[0], queens[1]];
-  let secondQueen = [queens[2], queens[3]];
+  const firstQueen = [queens[0], queens[1]];
+  const secondQueen = [queens[2], queens[3]];
 
   // Check vertical or horizontal threat: if queens share either axis
   const isVerticalThreat = (firstQueen[0] === secondQueen[0]);
