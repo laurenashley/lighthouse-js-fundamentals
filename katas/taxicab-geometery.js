@@ -1,59 +1,63 @@
 const blocksAway = function(directions) {
-  // break directions up into arrays of step pairs
+  const right = 'right',
+        left = 'left',
+        east = 'east',
+        west = 'west',
+        north = 'north'
+        south = 'south';
   let stepsArr = [],
-      counter = 0,
-      x = 0,
-      y = 0,
       currentDir = '',
-      result = {};
+      result = {east: 0, north: 0};
   
+
+  // break directions up into arrays of step pairs
   for (let x = 0; x < directions.length; x += 2) {
     let y = x + 1;
     stepsArr.push([directions[x], directions[y]]);
   }
 
-  // Assign value to east (y) and north (x) per reach step
+  // Assign value to east (y) and north (x) per each step, adjust current direction
   for (step of stepsArr) {
-    console.log(counter, step);
     const direction = step[0];
-    switch (counter) {
-      case  0:
-        if (direction === 'right') {
-          y = step[1];
-          currentDir = 'east';
-          result['east'] = y;
-          result['north'] = 0;
-        } else {
-          x = step[1];
-          currentDir = 'north';
-          result['east'] = 0;
-          result['north'] = x;
-        }
-        break;
-      case 1:
-        if (currentDir === 'east' && direction === 'right') {
-          y = y += step[1];
-          result['east'] = y;
-        } else if (currentDir === 'east' && direction === 'left') {
-          x = x += step[1];
-          result['north'] = x;
-          currentDir = 'north';
-        } else if (currentDir === 'north' && direction === 'right') {
-          y = y += step[1];
-          result['east'] = y;
-          currentDir = 'east';
-        }
-        break;
-    }
 
-    console.log(x, y, currentDir);
-    counter++;
+    // Set direction and value of first step
+    if (stepsArr.indexOf(step) === 0 && direction === right) {
+      currentDir = east;
+      result.east = step[1];
+    } else if (stepsArr.indexOf(step) === 0 && direction === left) {
+      currentDir = north;
+      result.north = step[1];
+    } else {
+
+      if (currentDir === east && direction === right) {
+        currentDir = south;
+        result.north -= step[1];
+      } else if (currentDir === east && direction === left) {
+        currentDir = north;
+        result.north += step[1];
+      } else if (currentDir === north && direction === right) {
+        currentDir = east;
+        result.east += step[1];
+      } else if (currentDir === north && direction === left) {
+        currentDir = west;
+        result.east -= step[1];
+      } else if (currentDir === west && direction === left) {
+        currentDir = south;
+        result.north -= step[1];
+      } else if (currentDir === west && direction === right) {
+        currentDir = north;
+        result.north += step[1];
+      } else if (currentDir === south && direction === left) {
+        currentDir = east;
+        result.east += step[1];
+      } else if (currentDir === south && direction === right) {
+        currentDir = west;
+        result.east -= step[1];
+      } 
+    }
   }
 
   return result;
-
-
-
 };
 
 console.log(blocksAway(["right", 2, "left", 3, "left", 1]));
